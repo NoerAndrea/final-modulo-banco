@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String @db.VarChar(35)
+  email    String @db.VarChar(30)
+  username String @db.VarChar(10)
+  password String @db.VarChar(20)
+
+  Tweet   Tweet[]
+  Retweet Retweet[]
+  Follower Follower[] @relation("follower")//quem me segue 
+  Followed Follower[] @relation("followed")//quem estou seguindo
+
+  LikesToUser Like[]
+
+  @@map("users")
+}
+
+model Tweet {
+  id      String @id @default(uuid())
+  content String @db.VarChar(500)
+  type    String @db.VarChar(5) //tweet
+  userId  String
+
+  Retweet Retweet[]
+  Like    Like[]
+
+  User User @relation(fields: [userId], references: [id])
+
+  @@map("tweets")
+}
+
+model Retweet {
+  id      String @id @default(uuid())
+  content String @db.VarChar(500)
+  tweetId String
+  userId  String
+
+  Tweet Tweet @relation(fields: [tweetId], references: [id])
+  User  User  @relation(fields: [userId], references: [id])
+
+  @@map("re-tweets")
+}
+
+model Like {
+  id      String @id @default(uuid())
+  userId  String
+  tweetId String
+
+  Tweet Tweet @relation(fields: [tweetId], references: [id])
+  User  User  @relation(fields: [userId], references: [id])
+
+  @@map("likes_to_users")
+}
+
+model Follower {
+  id         String @id @default(uuid())
+  userId     String
+  followerId String @unique
+
+  User User @relation("follower", fields: [userId], references: [id])
+  Follower User @relation("followed", fields: [followerId], references: [id])
+
+  @@map("user_followers")
+}
