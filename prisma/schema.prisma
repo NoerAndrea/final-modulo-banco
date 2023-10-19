@@ -36,8 +36,9 @@ model Tweet {
   Retweet Retweet[]
   Like    Like[]
 
-  User User @relation(fields: [userId], references: [id])
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  
   @@map("tweets")
 }
 
@@ -47,9 +48,10 @@ model Retweet {
   tweetId String
   userId  String
 
-  Tweet Tweet @relation(fields: [tweetId], references: [id])
-  User  User  @relation(fields: [userId], references: [id])
+  Tweet Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  User  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  
   @@map("re-tweets")
 }
 
@@ -58,9 +60,10 @@ model Like {
   userId  String
   tweetId String
 
-  Tweet Tweet @relation(fields: [tweetId], references: [id])
-  User  User  @relation(fields: [userId], references: [id])
+  Tweet Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  User  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  
   @@map("likes_to_users")
 }
 
@@ -69,8 +72,9 @@ model Follower {
   userId     String
   followerId String @unique
 
-  User User @relation("follower", fields: [userId], references: [id])
-  Follower User @relation("followed", fields: [followerId], references: [id])
+  User User @relation("follower", fields: [userId], references: [id], onDelete: Cascade)
+  Follower User @relation("followed", fields: [followerId], references: [id], onDelete: Cascade)
 
+  
   @@map("followers")
 }
