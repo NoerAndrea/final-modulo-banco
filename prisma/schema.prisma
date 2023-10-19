@@ -72,5 +72,5 @@ model Follower {
   User User @relation("follower", fields: [userId], references: [id])
   Follower User @relation("followed", fields: [followerId], references: [id])
 
-  @@map("user_followers")
+  @@map("followers")
 }
