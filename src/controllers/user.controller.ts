@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import userServece from "../services/user.servece";
+import userServece from "../services/user.service";
 
 export class userController {
+    //criar
     public async create (req: Request, res: Response) {
         try {
             const {name, email, username, password} = req.body;
@@ -17,7 +18,7 @@ export class userController {
                 name,
                 email,
                 username,
-                password,
+                password,                
             });
 
             return res.status(201).send({
@@ -32,10 +33,11 @@ export class userController {
             });
         };        
     }
-
+    
+    //deletar
     public async delete(req: Request, res: Response) {
         try {
-            const {id} = req.params;
+            const {id} = req.body;
 
             const result = await userServece.delete(id);
 
