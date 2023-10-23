@@ -72,7 +72,7 @@ class UserService {
 
         await repository.user.delete({
             where: {
-                id
+                id,
             },
         });
 

@@ -37,7 +37,7 @@ export class userController {
     //deletar
     public async delete(req: Request, res: Response) {
         try {
-            const {id} = req.body;
+            const {id} = req.params;
 
             const result = await userServece.delete(id);
 
