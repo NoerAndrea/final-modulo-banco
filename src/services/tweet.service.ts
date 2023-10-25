@@ -2,11 +2,10 @@ import repository from "../database/prisma.database";
 import { ResponseDto } from "../dtos/response.dto";
 import { CreateTweetDTO, DeleteTweetDTO, UpdateTweetDTO } from "../dtos/tweet.dto";
 import { Tweet } from "../models/tweet.model";
-import { User } from "../models/user.model";
 
 class TweetSevice {
     //criar
-    public async create(data: CreateTweetDTO) {
+    public async create(data: CreateTweetDTO):Promise<ResponseDto> {
         const tweet = new Tweet(data.content, data.type, data.idUser);
 
         const createdTweet = await repository.tweet.create({
@@ -17,8 +16,8 @@ class TweetSevice {
             },
         });
         return {
-            ode:201,
-            message:'tweet created successfully.',
+            code:201,
+            message:'Tweet created successfully.',
             data: createdTweet,
         }
     }
@@ -47,8 +46,8 @@ class TweetSevice {
         });
         return{
             code:200,
-            message:'List of all user tweets: ${data[0].User.username}',
-            data: data
+            message:'List of all user tweets: data[0]?.User.username',
+            data: data,
         };
     }
     //atualizar

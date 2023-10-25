@@ -2,7 +2,6 @@ import repository from "../database/prisma.database";
 import { CreateUserDTO} from "../dtos/user.dto";
 import { User } from "../models/user.model";
 import { UpdateUserDTO } from "../dtos/user.dto";
-import { v4 as createUuid} from "uuid";
 import { ResponseDto } from "../dtos/response.dto";
 
 class UserService {
@@ -24,17 +23,17 @@ class UserService {
         };
     }   
     
-    /*public async update(data: UpdateUserDTO): Promise<ResponseDto>{
-        const user = await repository.user.update({
-            where:{
-                username: data.username,
+    public async update(data: UpdateUserDTO): Promise<ResponseDto>{
+        const user = await repository.user.findUnique({
+            where: {
+                id:data.userID,
             },
         });
 
-        if(!user){
+        if (!user) {
             return {
                 code: 404,
-                message: 'User not found.'
+                message: "User not found.",
             };
         }
 
@@ -54,7 +53,7 @@ class UserService {
             message:'User updated successfully.',
             data: updateUser
         };
-    }*/
+    }
    
     public async delete(id:string): Promise<ResponseDto> {
         const user = await repository.user.findUnique({
@@ -94,6 +93,29 @@ class UserService {
           message: `Successfully.`,
           data: result,
         };
+      }
+
+      public async getUsernameAndPassword(
+        emailOrUsername: string,
+        password: string
+      ) {
+        const user = await repository.user.findFirst({
+          where: {
+            OR: [{ email: emailOrUsername }, { username: emailOrUsername }],
+            password: password,
+          },
+        });
+        return user;
+      }
+    
+      public async getByToken(token: string) {
+        const user = await repository.user.findUnique({
+          where: {
+            token
+          },
+        });
+    
+        return user;
       }
 }
 

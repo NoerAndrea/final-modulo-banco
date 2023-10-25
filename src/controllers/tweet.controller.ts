@@ -18,7 +18,9 @@ export class TweetController {
             });
         } catch (error: any) {
             res.status(500).send({
-                error
+                code: 500,
+                message: "Internal server error",
+                error: error.toString(),
             });
         };        
     }
@@ -26,9 +28,13 @@ export class TweetController {
     public async list (req: Request, res: Response) {
         try {
             const result= await tweetService.list();
+
             return res.status(200).send(result);
-        }catch (error){
-            return res.status(500).send(error);
+        }catch (error: any){
+            return res.status(500).send({
+                code: 500,
+                message: "Internal server error",
+                error: error.toString(),});
         }
     }
 
@@ -39,8 +45,11 @@ export class TweetController {
             const result = await tweetService.listByUser(idUser);
 
             return res.status(200).send(result)
-        }catch (error){
-            return res.status(500).send(error);
+        }catch (error: any){
+            return res.status(500).send({
+                code: 500,
+                message: "Internal server error",
+                error: error.toString(),});
         }
     }
 
@@ -52,8 +61,12 @@ export class TweetController {
             const result = await tweetService.update({id, idUser, content});
 
             return res.status(200).send(result)
-        }catch (error){
-            return res.status(500).send(error);
+        }catch (error: any){
+            return res.status(500).send({
+                code: 500,
+                message: "Internal server error",
+                error: error.toString(),
+            });
         }
     }
 
@@ -65,8 +78,12 @@ export class TweetController {
           const result = await tweetService.delete({ id, idUser });
     
           return res.status(200).send(result);
-        } catch (error) {
-          return res.status(500).send(error);
+        } catch (error: any){
+            return res.status(500).send({
+                code: 500,
+                message: "Internal server error",
+                error: error.toString(),
+            });
         }
       }
 }
